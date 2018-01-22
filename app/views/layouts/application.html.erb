@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tickets</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">IventTiket</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <%= link_to  "Events' list", root_path, class: "nav-link" %>
+                </li>
+                <% if user_signed_in? %>
+                  <% if current_user.is_admin %>
+                  <li class="nav-item">
+                    <a class="nav-link" href="<%= new_event_path %>"><%= t(:create_new_event_label) %></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="<%= tickets_path %>"><%= t(:all_tickets) %></a>
+                    </li>
+                  <% end %>
+                  <li class="nav-item">
+                    <a class="nav-link" href="<%= user_events_path %>"><%= t(:my_events) %></a>
+                  </li>
+                <% end %>
+              </ul>
+              <div class="my-2 my-lg-0 nav-item dropdown">
+                  <% if user_signed_in? %>
+                  Stan konta: <%= number_to_currency(current_user.money) %>
+                  <% end %>
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <% if user_signed_in? %>
+                      <%= current_user.email %>
+                    <% else %>
+                      <%= t(:are_you_member) %>
+                    <% end %>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <% if user_signed_in? %>
+                        <%= link_to  "Profile", edit_user_registration_path, class:"dropdown-item" %>
+                        <%= link_to  "Logout", destroy_user_session_path, method: :delete, class:"dropdown-item" %>
+                      <% else %>
+                        <%= link_to  "Sign in", new_user_session_path, class:"dropdown-item" %>
+                        <%= link_to  "Sign up", new_user_registration_path, class:"dropdown-item" %>
+                      <% end %>
+                  </div>
+                </div>
+            </div>
+          </nav>
+          <% if notice %>
+            <p class="alert alert-warning" role="alert"><%= notice %></p>
+          <% end %>
+          <% if alert %>
+            <p class="alert alert-info" role="alert"><%= alert %></p>
+          <% end %>
+      <%= yield %>
+    </div>
+  </body>
+</html>

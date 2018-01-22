@@ -1,0 +1,15 @@
+<h2><%= t(:all_events_title)%></h2>
+<table class="table table-striped">
+    <tr>
+        <th>Name</th>
+        <th>Tickets available</th>
+        <th>Status</th>
+    </tr>
+    <%for event in @events %>
+    <tr>
+        <td><%= link_to event.name, "/events/#{event.id}" %></td>
+        <td><%= event.max_seats_number %></td>
+        <td><%= Status.where(id: event.status_id).take.name %></td>
+    </tr>
+    <%end %>
+</table>

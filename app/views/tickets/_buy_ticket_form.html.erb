@@ -1,0 +1,61 @@
+<%= form_with(model: ticket, local: true, url: ticket_bought_path) do |form| %>
+  <% if ticket.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(ticket.errors.count, "error") %> prohibited this ticket from being saved:</h2>
+
+      <ul>
+      <% ticket.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row jumbotron">
+    <div class="col-sm-12">
+        <strong><%= form.label :price %>: <%= number_to_currency(ticket.price) %></strong>
+        <p><%= t(:seat_id_seq) %>: <%= ticket.seat_id_seq %></p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :name %>
+    <% if user_signed_in? %>
+      <%= form.text_field :name, id: :ticket_name, class: "form-control", value: current_user.name %>
+    <% else %>
+      <%= form.text_area :address, id: :ticket_address, class: "form-control"  %>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :address %>
+    <% if user_signed_in? %>
+      <%= form.text_area :address, id: :ticket_address, class: "form-control", value: current_user.address %>
+    <% else %>
+      <%= form.text_area :address, id: :ticket_address, class: "form-control"  %>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :email_address %>
+    <% if user_signed_in? %>
+      <%= form.text_field :email_address, id: :ticket_email_address, class: "form-control", value: current_user.email %>
+    <% else %>
+      <%= form.text_field :email_address, id: :ticket_email_address, class: "form-control" %>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+  <%= form.label :phone %>
+  <% if user_signed_in? %>
+    <%= form.text_field :phone, id: :ticket_phone, class: "form-control", value: current_user.phone %>
+  <% else %>
+    <%= form.text_field :phone, id: :ticket_phone, class: "form-control" %>
+  <% end %>
+  
+</div>
+
+  <div class="actions">
+    <%= form.submit "Buy ticket", class: "btn btn-primary" %>
+  </div>
+<% end %>

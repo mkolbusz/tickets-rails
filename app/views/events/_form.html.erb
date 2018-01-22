@@ -1,0 +1,84 @@
+<%= form_with(model: event, local: true) do |form| %>
+    <% if event.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(event.errors.count, "error") %> prohibited this ticket from being saved:</h2>
+  
+        <ul>
+        <% event.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <div class="form-group">
+      <%= form.label :name %>
+      <%= form.text_field :name, id: :event_name, class: "form-control" %>
+    </div>
+  
+    <div class="form-group">
+      <%= form.label :description %>
+      <%= form.text_area :description, id: :event_description, class: "form-control" %>
+    </div>
+  
+    
+    <div class="row">
+      <div class="col-xs-12 col-sm-6">
+          <%= form.label :price_low %>
+          <div class="input-group">
+            
+            <%= form.number_field :price_low, id: :event_price_low, class: "form-control", min: 0 %>
+            <div class="input-group-append">
+                <span class="input-group-text"><%= number_to_currency(0)[0] %></span>
+            </div>
+          </div>
+          
+          
+      </div>
+      <div class="col-xs-12 col-sm-6">
+        <div class="form-group">
+          <%= form.label :price_high %>  
+          <div class="input-group">
+            <%= form.number_field :price_high, id: :event_price_high, class: "form-control", min: 0 %>
+            <div class="input-group-append">
+                <span class="input-group-text"><%= number_to_currency(0)[0] %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <div class="form-group">
+            <%= form.label :event_date %>
+            <%= form.date_field :event_date, id: :event_date, class: "form-control" %>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <div class="form-group">
+            <%= form.label t(:max_seats_number) %>
+            <%= form.number_field :max_seats_number, id: :max_seats_number, class: "form-control", min: 1 %>
+          </div>
+        </div>
+      </div>
+
+  
+    
+
+  
+
+    <div class="form-group">
+        <%= form.label :status %>
+        <%= form.collection_select(:status_id, Status.all, :id, :name, {:prompt => true}, {:class => "form-control"}) %>
+      </div>
+
+    <div class="form-group">
+      <%= form.check_box :adults_only, {:id => "event_#{:adults_only}"}, true, false %>
+      <%= form.label :adults_only %>
+      
+    </div>
+  
+    <div class="actions">
+      <%= form.submit "Save event", class: "btn btn-primary" %>
+    </div>
+<% end %>

@@ -1,0 +1,27 @@
+<% if flash[:successfullyAdded] %>
+<div class="row">
+    <div class="col-sm-12">
+        <p class="alert alert-info"><%= flash[:successfullyAdded] %></p>
+    </div>
+</div>
+<% end %>
+
+<div class="row">
+    <div class="col-sm-10 offset-sm-1">
+       <%= render 'shared/event_table', event: @event %>
+    </div>
+</div>
+
+<% if user_signed_in? && (current_user.is_admin || @event.user == current_user) %>
+<div class="row">
+    <div class="col-sm-12">
+        <% if @event.tickets.count < @event.max_seats_number %>
+        <%= render  "tickets/form", ticket: Ticket.new(:event_id => @event.id, :user_id => current_user.id) %>
+        <% else %>
+            <p class="alert alert-info">All tickets added</p>
+        <% end %>
+    </div>
+</div>
+<% end %>
+
+<%= render  "shared/tickets_list", tickets: @event.tickets.where(:user_id => nil).paginate(:page => params[:page], :per_page => 5) %>

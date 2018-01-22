@@ -1,0 +1,44 @@
+<h1>Tickets</h1>
+<% if tickets.count == 0 %>
+  <p class="alert alert-info">Tickets sold out!</p>
+<% else %>
+  <table class="table">
+    <thead>
+      <tr>     
+        <th>Seat id seq</th>
+        <th>Price</th>
+        <th>Menu</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% tickets.each do |ticket| %>
+        <tr>
+          <td><%= ticket.seat_id_seq %></td>
+          <td><%= number_to_currency(ticket.price) %></td>
+          <td>
+            <% if ticket.is_for_sell %>
+              <% if user_signed_in? %>
+                <% if current_user.money < ticket.price || (ticket.event.adults_only && !current_user.is_adult) %>
+                  <span>You can not buy ticket!</span>
+                <% else %>
+                <%= link_to 'Buy', ticket_buy_path(ticket), class: "btn btn-link" %>
+                <% end %>
+              <% else %>
+                <p>Log in to buy a ticket!</p>
+              <% end %>
+            <% else %>
+              <span>We will start selling tickets on <%= ticket.event.event_date - 30 %></span>
+            <% end %>
+            <% if user_signed_in? && current_user.is_admin %>
+              <%= link_to 'Edit', edit_ticket_path(ticket), class: "btn btn-link" %>
+              <%= link_to 'Remove', ticket, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-link" %>
+            <% end %>
+            
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate tickets %>
+<% end %>

@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h2>All your events</h2>
+    </div>
+</div>
+
+<%= render 'shared/date_filter' %>
+<div class="row">
+    <div class="col-sm-12">
+        <div id="accordion">
+            <% @events.each do |e| %>
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#event-<%= e.id %>" aria-expanded="true" aria-controls="event-<%= e.id %>">
+                            <%= e.name %> (<%= e.event_date %>) -  
+                            <%= number_to_currency(e.tickets.where(user: current_user).sum(&:price)) %>
+                        </button>
+                    </h5>
+                    </div>
+                
+                    <div id="event-<%= e.id %>" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <p>Address: <%= e.address %></p>
+                        <table class="table">
+                            <tr>
+                                <th>Seat number</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Menu</th>
+                            </tr>
+                            <% e.tickets.where(user: current_user).each do |t| %>
+                                <tr>
+                                    <td><%= t.seat_id_seq %></td>
+                                    <td><%= t.name %></td>
+                                    <td><%= number_to_currency(t.price) %></td>
+                                    <td>
+                                        <% if !t.waiting_for_confirmation? %>
+                                            <%= link_to 'Return', ticket_return_path(t), data: { confirm: 'Are you sure?' } %>
+                                        <% end %>
+                                    </td>
+                                </tr>
+                            <% end %>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,5 @@
+<ul>
+    <%for event in events %>
+        <li><%= event.id %> - <%= link_to event.name, "/events/#{event.id}" %></li>
+    <%end %>
+</ul>

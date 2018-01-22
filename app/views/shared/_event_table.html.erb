@@ -1,0 +1,18 @@
+<table class="table">
+    <tr>
+        <td>Nazwa</td>
+        <td><%= event.name %></td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td><%= event.description %></td>
+    </tr>
+    <tr>
+        <td>Date</td>
+        <td><%= event.event_date %></td>
+    </tr>
+    <tr>
+        <td>Price</td>
+        <td><%= number_to_currency(event.price_low) %> - <%= number_to_currency(event.price_high) %></td>
+    </tr>
+</table>
