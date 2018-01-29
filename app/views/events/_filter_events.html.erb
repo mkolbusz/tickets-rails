@@ -1,0 +1,14 @@
+
+<%= form_tag(events_path, method: "get") do %>
+<div class="row">
+    <div class="col-sm-12 col-md-5">
+        <div class="form-group">
+            <%= label_tag(:name, "Search by event's name:") %>
+            <%= text_field_tag(:name, params[:name], class: "form-control") %>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-2">
+        <%= submit_tag("Filter", class:"btn btn-primary btn-block", style:"margin-top: 2em") %>
+    </div>
+</div>
+<% end %>

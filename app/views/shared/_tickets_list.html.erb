@@ -33,6 +33,7 @@
             <% if user_signed_in? && current_user.is_admin %>
               <%= link_to 'Edit', edit_ticket_path(ticket), class: "btn btn-link" %>
               <%= link_to 'Remove', ticket, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-link" %>
+              <%= link_to 'Show', ticket, class: "btn btn-link" %>
             <% end %>
             
           </td>

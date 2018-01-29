@@ -19,6 +19,10 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 1.day do
-    rake "set_ticket_prices:set_prices"
+every 1.day, at: '12:00am' do
+    rake "tickets:set_prices"
+end
+
+every :day, at: '12:00am' do
+    rake "tickets:set_status"
 end

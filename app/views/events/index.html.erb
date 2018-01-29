@@ -1,15 +1,26 @@
 <h2><%= t(:all_events_title)%></h2>
+
+<%= render "filter_events", events: @events %>
+
 <table class="table table-striped">
     <tr>
         <th>Name</th>
         <th>Tickets available</th>
         <th>Status</th>
+        <td>Data</td>
+        <th>Menu</th>
     </tr>
     <%for event in @events %>
     <tr>
         <td><%= link_to event.name, "/events/#{event.id}" %></td>
         <td><%= event.max_seats_number %></td>
+        <td><%= event.event_date %></td>
         <td><%= Status.where(id: event.status_id).take.name %></td>
+        <td>
+            <% if user_signed_in? && current_user.is_admin %>
+            <%= link_to  "Edit", edit_event_path(event), class: "btn btn-link" %>
+            <% end %>
+        </td>
     </tr>
     <%end %>
 </table>

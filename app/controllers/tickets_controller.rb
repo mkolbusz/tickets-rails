@@ -6,10 +6,22 @@ class TicketsController < ApplicationController
   # GET /tickets.json
   def index
     if current_user.is_admin
-      @tickets = Ticket.paginate(:page => params[:page], :per_page => 10)
+      @tickets = Ticket.joins(:event)
     else
-      @tickets = current_user.tickets
+      @tickets = current_user.tickets.joins(:event)
     end
+    @tickets = @tickets.merge(Event.where("events.name LIKE :search", search: "%#{params[:event_name]}%"))
+    .where("seat_id_seq LIKE '%#{params[:seat_number]}%'")
+
+    if params[:event_date].try(:to_date)
+      @tickets = @tickets.merge(Event.where(event_date: params[:event_date].to_date))
+    end
+
+    if params[:client_name] && params[:client_name].mb_chars.length > 0
+      @tickets = @tickets.where("tickets.name LIKE '%#{params[:client_name]}%'")
+    end
+
+    @tickets = @tickets.paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /tickets/1
@@ -83,8 +95,8 @@ class TicketsController < ApplicationController
       flash[:notice] = "Ticket purchased successfully."
       redirect_to events_path
     else
-      flash[:error] = "Error occured."
-      redirect_to "/events/#{@event.id}"
+      # flash[:error] = "Error occured."
+      redirect_to ticket_buy_path(@ticket)
     end
   end
 

@@ -1,11 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => {registrations: 'registrations'}
 
-  resources :events, :only => [:index, :new, :create, :show]
+  resources :events, :only => [:index, :new, :create, :show, :edit, :update]
 
   resources :tickets
   get '/tickets/:id/buy', to: 'tickets#buy', as: :ticket_buy
   patch '/tickets/:id/bought', to: 'tickets#bought', as: :ticket_bought
+  post '/tickets/buy_multiple', to: 'tickets#buy_multiple', as: :ticket_buy_multiple
   get '/tickets/:id/return', to: 'tickets#return_payment', as: :ticket_return
   get '/tickets/:id/return_confirmation', to: 'tickets#return_payment_confirmation', as: :ticket_return_confirmation
 
